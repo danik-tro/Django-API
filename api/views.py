@@ -1,6 +1,23 @@
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponse
 from django.views import View
+
+from .models import Book
+
 import json
+
+
+class BookView(View):
+    @staticmethod
+    def get(request):
+
+        return HttpResponse(json.dumps({
+            'books': [
+                book.serialize() for book in Book.objects.all()
+            ]
+        }))
+
+    def post(self, request):
+        pass
 
 
 class APIView(View):
