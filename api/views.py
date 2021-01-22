@@ -1,5 +1,6 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views import View
+import json
 
 
 class APIView(View):
@@ -10,7 +11,7 @@ class APIView(View):
             'skills': ['Python', 'Django'],
         }
 
-        return JsonResponse(data)
+        return HttpResponse(json.dumps(data))
 
 
 def api_view(request):
@@ -20,5 +21,5 @@ def api_view(request):
         'skills': ['Python', 'Django'],
     }
 
-    return JsonResponse(data)
+    return HttpResponse(json.dumps(data))
 

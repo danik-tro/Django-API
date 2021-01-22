@@ -1,17 +1,23 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <p>Hello</p>
+    <edt-main-wrapper />
+  </div>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
+<script>
+  import edtMainWrapper from './components/edt-main-wrapper'
+  export default {
+    name: 'app',
+    components: {
+      edtMainWrapper
+    },
+    mounted() {
+      console.log('app component is running')
+    }
   }
-}
+
 </script>
 
 <style>
