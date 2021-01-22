@@ -15,7 +15,6 @@
       edtMainWrapper
     },
     mounted() {
-      console.log('OK');
       this.query();
     },
     data () {

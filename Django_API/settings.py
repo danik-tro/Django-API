@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+    'api.apps.ApiConfig',
 ]
 
 MIDDLEWARE = [
@@ -77,8 +78,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Django_API.wsgi.application'
-
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
