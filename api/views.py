@@ -15,6 +15,7 @@ class APIView(View):
 
 
 def api_view(request):
+    print(request)
     data = {
         'name': request.user.username,
         'url': 'https://www.pyscoop.com/',

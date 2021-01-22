@@ -8,14 +8,43 @@
 
 <script>
   import edtMainWrapper from './components/edt-main-wrapper'
+
   export default {
     name: 'app',
     components: {
       edtMainWrapper
     },
     mounted() {
-      console.log('app component is running')
-    }
+      console.log('OK');
+      this.query();
+    },
+    data () {
+      return {
+
+      }
+    },
+    props: {
+
+    },
+    methods: {
+      query: function () {
+        const request = new XMLHttpRequest();
+        const url = 'http://localhost:8000/api/';
+
+        request.open('GET', url);
+        request.setRequestHeader('Content-Type', 'application/x-www-form-url');
+        request.addEventListener('readystatechange', () => {
+          if (request.readyState === 4 && request.status === 200) {
+            console.log(request.responseText);
+          }
+        });
+        request.send();
+      },
+
+    },
+    watch: {
+
+    },
   }
 
 </script>

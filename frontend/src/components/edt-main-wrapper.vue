@@ -18,7 +18,6 @@
     methods: {},
     watch: {},
     mounted() {
-      console.log('I am a alive')
     }
   }
 </script>
