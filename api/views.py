@@ -32,12 +32,6 @@ class APIView(View):
 
 
 def api_view(request):
-    # Kibana
-    es = Elasticsearch([{
-        "host": "localhost",
-        "port": 9200,
-    }])
-
     data = {
         'name': request.user.username,
         'url': 'https://www.pyscoop.com/',
