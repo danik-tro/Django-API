@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.views import View
+from elasticsearch import Elasticsearch
 
 from .models import Book
 
@@ -9,7 +10,6 @@ import json
 class BookView(View):
     @staticmethod
     def get(request):
-
         return HttpResponse(json.dumps({
             'books': [
                 book.serialize() for book in Book.objects.all()
@@ -32,7 +32,12 @@ class APIView(View):
 
 
 def api_view(request):
-    print(request)
+    # Kibana
+    es = Elasticsearch([{
+        "host": "localhost",
+        "port": 9200,
+    }])
+
     data = {
         'name': request.user.username,
         'url': 'https://www.pyscoop.com/',
