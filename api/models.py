@@ -78,11 +78,9 @@ class Status(models.Model):
 class Book(models.Model):
     name = models.CharField(max_length=150, db_index=True)
     slug = models.SlugField(max_length=150, db_index=True, blank=True)
+    url = models.URLField()
     author = models.CharField(max_length=150, blank=True)
-    date_writing = models.DateField()
-    status = models.ForeignKey(Status, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def serialize(self):
@@ -92,10 +90,7 @@ class Book(models.Model):
                     'book_title': self.name,
                     'slug': self.slug,
                     'author': self.author,
-                    'date_writing': self.date_writing,
-                    'status_id': self.status,
                     'category_id': self.category,
-                    'user_id': self.user,
                     'date_added': self.date_added
                 }
             }
