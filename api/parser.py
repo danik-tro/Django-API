@@ -1,11 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
+from . import models
 
 
 class BookScrapper:
-    def __init__(self):
-        self.url = "https://www.yakaboo.ua/ecomdev_catalog/ajax/now_buying/"
-
     @staticmethod
     def parse_category():
         url = 'https://www.yakaboo.ua/turpentine/esi/getBlock/method/ajax/access/public/ttl/86400/hmac' \
@@ -25,14 +23,22 @@ class BookScrapper:
         } for item in div_books.find_all('a'))
 
     @staticmethod
+    def add_content():
+        return (BookScrapper.parse_content(category.url) for category in Category.get_data_from_parser())
+
+    @staticmethod
     def parse_content(url):
         response = requests.get(url)
 
         div_item = BeautifulSoup(response.text,
                                  'lxml').find_all('li', {'class': 'item last'})
+        created_books = models.Book.objects.bulk_create(
+            (models.Book() for _ in range(len(div_item)))
+        )
 
         return (
             {
+                'id': created_books[0].pk,
                 'code': int(item['data-product-id']),
                 "url": item.find('a', {
                     "class": "product-name"
@@ -46,7 +52,7 @@ class BookScrapper:
                 'price': ' '.join(' '.join(item.find('div', {
                     'class': "price"
                 }).text.split('\xa0')).split())
-            } for item in div_item
+            } for key, item in enumerate(div_item, 0)
         )
 
 
@@ -93,4 +99,4 @@ def facebook_ads():
 
 
 if __name__ == "__main__":
-    print(list(BookScrapper().parse_content('https://www.yakaboo.ua/knigi/samorazvitie-motivacija.html?p=1&is_ajax=1')))
+    print(list(BookScrapper.parse_content('https://www.yakaboo.ua/knigi/samorazvitie-motivacija.html?p=1&is_ajax=1')))

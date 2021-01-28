@@ -1,6 +1,6 @@
 from django.db import models
 from .elastic import ElasticSearchDB
-from .parser import BookScrapper
+from . import parser
 
 
 class User(models.Model):
@@ -37,6 +37,12 @@ class Category(models.Model):
     url = models.URLField()
     slug = models.SlugField(max_length=150, db_index=True,
                             blank=True, unique=True)
+
+    @classmethod
+    def get_data_from_parser(cls):
+        return cls.objects.bulk_create(
+            (cls(**category) for category in parser.BookScrapper.parse_category())
+        )
 
     def serialize(self):
         return {
@@ -88,10 +94,9 @@ class Book(models.Model):
             }
 
     def get_data_from_es(self):
-        self.
-        es = ElasticSearchDB()
+        pass
 
     def add_data_to_es(self):
-        es = ElasticSearchDB()
+        pass
 
 
