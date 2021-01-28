@@ -1,5 +1,5 @@
 from django.db import models
-import json
+from .elastic import ElasticSearchDB
 
 
 class User(models.Model):
@@ -76,27 +76,18 @@ class Status(models.Model):
 
 
 class Book(models.Model):
-    name = models.CharField(max_length=150, db_index=True)
-    slug = models.SlugField(max_length=150, db_index=True, blank=True)
-    url = models.URLField()
-    author = models.CharField(max_length=150, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    date_added = models.DateTimeField(auto_now_add=True)
-
     def serialize(self):
         return {
                 'pk': self.pk,
                 'fields': {
-                    'book_title': self.name,
-                    'slug': self.slug,
-                    'author': self.author,
-                    'category_id': self.category,
-                    'date_added': self.date_added
+
                 }
             }
 
-    class Meta:
-        ordering = ('-date_added',)
-        verbose_name = 'Book'
-        verbose_name_plural = 'Books'
+    def get_data_from_es(self):
+        es = ElasticSearchDB()
+
+    def add_data_to_es(self):
+        es = ElasticSearchDB()
+
 

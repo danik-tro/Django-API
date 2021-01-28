@@ -68,20 +68,19 @@ def facebook_ads():
     }
 
     header = {
-            'accept': '*/*',
-            'accept-encoding': 'gzip, deflate, br',
-            'accept-language': 'en-US,en;q=0.9',
-            'content-length': '423',
-            'content-type': 'application/x-www-form-urlencoded',
-            'origin': 'https://www.facebook.com',
-            'referer': 'https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=ALL&view_all_page_id=27682782579',
+            'Accept': '*/*',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Content-Length': '423',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Origin': 'https://www.facebook.com',
+            'Referer': 'https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=ALL&view_all_page_id=27682782579',
             'sec-fetch-dest': 'empty',
             'sec-fetch-mode': 'cors',
             'sec-fetch-site': 'same-origin',
-            'user-agent': fake_useragent.UserAgent().random,
-            'Accept-Encoding': 'gzip, deflate'
+            'User-Agent': fake_useragent.UserAgent().random,
+            'Accept-Encoding': 'gzip, deflate',
         }
-    res = requests.get(url, data=data, headers=header)
+    res = requests.post(url, data=data, headers=header)
     x = res.text
     print(x)
 
