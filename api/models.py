@@ -1,5 +1,6 @@
 from django.db import models
 from .elastic import ElasticSearchDB
+from .parser import BookScrapper
 
 
 class User(models.Model):
@@ -33,6 +34,7 @@ class User(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=150, db_index=True)
+    url = models.URLField()
     slug = models.SlugField(max_length=150, db_index=True,
                             blank=True, unique=True)
 
