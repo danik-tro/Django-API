@@ -1,6 +1,17 @@
 from elasticsearch import Elasticsearch
-from elasticsearch_dsl import Search, Q
-import json
+from elasticsearch_dsl import Search, Q, Text, Integer, Document
+from elasticsearch.helpers import bulk
+
+
+class BookDoc(Document):
+    title = Text
+    url = Text
+    author = Text
+    price = Text
+    code = Integer
+
+    class Index:
+        name = 'books'
 
 
 class ElasticSearchDB:
@@ -34,6 +45,17 @@ class ElasticSearchDB:
         return self.es.get(index=index,
                            doc_type=doc_type,
                            id=id_)
+
+
+class BookElasticSearchDB(ElasticSearchDB):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def add_documents(self, data):
+        bulk(self.es,
+             (
+                 BookDoc(**item).to_dict(include_meta=True) for item in data
+             ))
 
 
 def elastic_test_1():

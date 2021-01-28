@@ -28,22 +28,25 @@ class BookScrapper:
     def parse_content(url):
         response = requests.get(url)
 
+        div_item = BeautifulSoup(response.text,
+                                 'lxml').find_all('li', {'class': 'item last'})
+
         return (
             {
+                'code': int(item['data-product-id']),
                 "url": item.find('a', {
                     "class": "product-name"
                 })['href'],
-                "title": ' '.join(item.find('a', {
+                "title": item.find('a', {
                     "class": "product-name"
-                }).text.split()),
+                })['title'],
                 'author': ' '.join(item.find('div', {
                     'class': "product-author"
                 }).text.split()),
                 'price': ' '.join(' '.join(item.find('div', {
                     'class': "price"
                 }).text.split('\xa0')).split())
-            } for item in BeautifulSoup(response.text,
-                                        'lxml').find_all('div', {'class': 'caption'})
+            } for item in div_item
         )
 
 
@@ -84,7 +87,6 @@ def facebook_ads():
         'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36',
         'Accept-Encoding': 'gzip, deflate',
     }
-    res = requests.post(url, data=data, headers=header)
     res = requests.post(url, data=data, headers=header)
     x = res.text
     print(x)

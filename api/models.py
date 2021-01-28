@@ -43,6 +43,7 @@ class Category(models.Model):
                 'pk': self.pk,
                 'fields': {
                     'category': self.name,
+                    'url': self.url,
                     'slug': self.slug,
                 }
             }
@@ -87,6 +88,7 @@ class Book(models.Model):
             }
 
     def get_data_from_es(self):
+        self.
         es = ElasticSearchDB()
 
     def add_data_to_es(self):
