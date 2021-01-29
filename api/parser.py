@@ -24,16 +24,16 @@ class BookScrapper:
 
     @staticmethod
     def add_content():
-        return (BookScrapper.parse_content(category.url + '?p=2&is_ajax=1') for category in models.Category.get_data_from_parser())
+        return (BookScrapper.parse_content(category.url + '?p=2&is_ajax=1', category) for category in models.Category.get_data_from_parser())
 
     @staticmethod
-    def parse_content(url):
+    def parse_content(url, category):
         response = requests.get(url)
 
         div_item = BeautifulSoup(response.text,
                                  'lxml').find_all('li', {'class': 'item last'})
         created_books = models.Book.objects.bulk_create(
-            (models.Book() for _ in range(len(div_item)))
+            (models.Book(category=category) for _ in range(len(div_item)))
         )
 
         return (

@@ -1,5 +1,5 @@
 from elasticsearch import Elasticsearch
-from elasticsearch_dsl import Search, Q, Text, Integer, Document
+from elasticsearch_dsl import Search, Q, Text, Integer, Document, Long
 from elasticsearch.helpers import bulk
 
 
@@ -8,8 +8,8 @@ class BookDoc(Document):
     url = Text
     author = Text
     price = Text
-    code = Integer
-    id = Integer
+    code = Long
+    id = Long
 
     class Index:
         name = 'books'
@@ -54,7 +54,10 @@ class BookElasticSearchDB(ElasticSearchDB):
 
     def add_documents(self, data):
         for category in data:
-            print(list(category))
+            if not category:
+                continue
+
             bulk(self.es,
-                 [BookDoc(**item).to_dict(include_meta=True) for item in category])
+                 [{**BookDoc(**item).to_dict(include_meta=True), **{'_type':'BookDoc'}} for item in category],
+                 index='books', doc_type='BookDoc')
 

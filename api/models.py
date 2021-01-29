@@ -34,7 +34,7 @@ class User(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=150, db_index=True)
-    url = models.URLField()
+    url = models.URLField(unique=True)
     slug = models.SlugField(max_length=150, db_index=True,
                             blank=True)
 
@@ -85,6 +85,8 @@ class Status(models.Model):
 
 
 class Book(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
     def serialize(self):
         return {
                 'pk': self.pk,
@@ -94,7 +96,7 @@ class Book(models.Model):
             }
 
     def __str__(self):
-        return self.pk
+        return str(self.pk) + ' ' + self.category.name
 
     def get_data_from_es(self):
         pass
