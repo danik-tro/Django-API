@@ -11,7 +11,7 @@ class BookScrapper:
               '.mHolXJUYyPlfRkZoWnk8B83T7dc2umcJIz3gAzFllZ62vNfZ2HiwkghDpldBakwGwH6hgouRWm9Sk61aH.c28wseiCpTBms' \
               '.ZSSIBmzOoaNO69JH-PsrfP8339AXSB5jFzR0yIgHgzkA' \
               '-SxcdTMIjnLHs7zppDHoArkv3IefW9iLN3kiSrHdmDclzd6n123bGtggXJZJxU5PQY3meKwDU' \
-              '-ckTR57gY7CwGH08dibkvPC0BQN4bmiGOhiJqeWgbnKE7Q   bfEIeHnGSZqkxWJUoeGDLxnK.u2U-NNOrx.CXagcURg==/'
+              '-ckTR57gY7CwGH08dibkvPC0BQN4bmiGOhiJqeWgbnKE7QbfEIeHnGSZqkxWJUoeGDLxnK.u2U-NNOrx.CXagcURg==/'
 
         div_books = BeautifulSoup(requests.get(url).text,
                                   'lxml').find_all('div',
@@ -24,7 +24,7 @@ class BookScrapper:
 
     @staticmethod
     def add_content():
-        return (BookScrapper.parse_content(category.url) for category in Category.get_data_from_parser())
+        return (BookScrapper.parse_content(category.url + '?p=2&is_ajax=1') for category in models.Category.get_data_from_parser())
 
     @staticmethod
     def parse_content(url):
@@ -38,7 +38,7 @@ class BookScrapper:
 
         return (
             {
-                'id': created_books[0].pk,
+                'id': created_books[key].pk,
                 'code': int(item['data-product-id']),
                 "url": item.find('a', {
                     "class": "product-name"
@@ -96,7 +96,3 @@ def facebook_ads():
     res = requests.post(url, data=data, headers=header)
     x = res.text
     print(x)
-
-
-if __name__ == "__main__":
-    print(list(BookScrapper.parse_content('https://www.yakaboo.ua/knigi/samorazvitie-motivacija.html?p=1&is_ajax=1')))

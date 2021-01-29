@@ -53,11 +53,8 @@ class BookElasticSearchDB(ElasticSearchDB):
         super().__init__(**kwargs)
 
     def add_documents(self, data):
-        bulk(self.es,
-             (
-                 BookDoc(**item).to_dict(include_meta=True) for item in data
-             ))
+        for category in data:
+            print(list(category))
+            bulk(self.es,
+                 [BookDoc(**item).to_dict(include_meta=True) for item in category])
 
-
-if __name__ == "__main__":
-    pass

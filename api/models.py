@@ -1,5 +1,5 @@
 from django.db import models
-from .elastic import ElasticSearchDB
+from . import elastic
 from . import parser
 
 
@@ -36,7 +36,7 @@ class Category(models.Model):
     name = models.CharField(max_length=150, db_index=True)
     url = models.URLField()
     slug = models.SlugField(max_length=150, db_index=True,
-                            blank=True, unique=True)
+                            blank=True)
 
     @classmethod
     def get_data_from_parser(cls):
@@ -93,10 +93,14 @@ class Book(models.Model):
                 }
             }
 
+    def __str__(self):
+        return self.pk
+
     def get_data_from_es(self):
         pass
 
-    def add_data_to_es(self):
-        pass
+    @staticmethod
+    def add_data_to_es():
+        elastic.BookElasticSearchDB().add_documents(parser.BookScrapper.add_content())
 
 
